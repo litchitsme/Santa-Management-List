@@ -23,23 +23,23 @@
     "toys": [
       {
         "id": "1",
-        "text": "books"
+        "type": "books"
       },
       {
         "id": "2",
-        "text": "clothes"
+        "type": "clothes"
       },
       {
         "id": "3",
-        "text": "dolls"
+        "type": "dolls"
       },
       {
         "id": "4",
-        "text": "cars"
+        "type": "cars"
       },
       {
         "id": "5",
-        "text": "coal"
+        "type": "coal"
       }
     ]
   }
