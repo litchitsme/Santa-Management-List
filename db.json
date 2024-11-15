@@ -1,0 +1,37 @@
+{
+    "kids": [
+      {
+        "id": "1",
+        "name": "Julio",
+        "age": 27
+      },
+      {
+        "id": "1",
+        "name": "Karel",
+        "age": 27
+      }
+
+    ],
+    "toys": [
+      {
+        "id": "1",
+        "text": "books"
+      },
+      {
+        "id": "2",
+        "text": "clothes"
+      },
+      {
+        "id": "3",
+        "text": "dolls"
+      },
+      {
+        "id": "4",
+        "text": "cars"
+      },
+      {
+        "id": "5",
+        "text": "coal"
+      }
+    ]
+  }
