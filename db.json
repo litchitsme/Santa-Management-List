@@ -3,12 +3,20 @@
       {
         "id": "1",
         "name": "Julio",
-        "age": 27
+        "age": 27,
+        "behavior": "good"
       },
       {
         "id": "1",
         "name": "Karel",
-        "age": 27
+        "age": 27,
+        "behavior": "good"
+      },
+      {
+        "id": "1",
+        "name": "Josef",
+        "age": 27,
+        "behavior": "bad"
       }
 
     ],
