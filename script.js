@@ -45,8 +45,8 @@ function fetchdatakid() {
         .catch(e => console.error('Error fetching kids:', e));
 }
 function fetchdatatoy() {
-    output.innerHTML = '';
-    fetch(urlkid)
+    toyOutput.innerHTML = '';
+    fetch(urltoy)
         .then(res => res.json())
         .then(data => {
             if (data.length === 0) {
@@ -59,27 +59,15 @@ function fetchdatatoy() {
             
             // Sort posts by timestamp in descending order
             const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
-            sortedData.forEach(kids => {
-                output.innerHTML += `
+            sortedData.forEach(toys => {
+                toyOutput.innerHTML += `
                     <div class="post-item" id="post-${toys.id}">
                         <span class="post-content">${toys.type}</span>
-                        <div class="edit-form" style="display: none;">
-                            <input type="text" class="edit-title" value="${kids.name}">
-                            <input type="number" class="edit-views" value="${kids.age}">
-                            <input type="number" class="edit-likes" value="${kids.behavior || 0}">
-                            <button class="smallbutton" onclick="saveEdit('${kids.id}')">S</button>
-                            <button class="smallbutton" onclick="cancelEdit('${kids.id}')">X</button>
-                        </div>
-                        <div class="button-group">
-                            <button onclick="editPost('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, ${kids.behavior || 0}, ${kids.timestamp})">Save</button>
-                            <button onclick="deletePost('${kids.id}')">Delete</button>
-                        </div>
                     </div>
                 `;
             });
         })
-        .catch(e => console.error('Error fetching kids:', e));
+        .catch(e => console.error('Error fetching toys:', e));
 }
 
 
@@ -89,4 +77,5 @@ function fetchdatatoy() {
 
 // Initial load
 fetchdatakid();
+fetchdatatoy();
 // loadSavedPosts();
