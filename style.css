@@ -7,14 +7,16 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    background: linear-gradient(135deg, #13441b, #448d27, #215e2b);
     padding: 2rem;
     color: #fff;
 }
 
 .container {
-    max-width: 800px;
     margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 h1 {
@@ -81,16 +83,26 @@ button {
 }
 
 button:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(0, 255, 0, 0.4);
     transform: translateY(-2px);
 }
 
-#clearStorage {
-    background: rgba(255, 99, 99, 0.2);
+.smallbutton {
+    background: none;
+    border: none;
+    border-radius: 20px;
+    backdrop-filter: none;
 }
 
-#clearStorage:hover {
-    background: rgba(255, 99, 99, 0.3);
+.redbutton {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+.redbutton:hover {
+    background: rgba(253, 0, 0, 0.5);
+}
+.redbutton2:hover {
+    background: rgba(253, 0, 0, 0.5);
 }
 
 /* Posts Section */
@@ -118,11 +130,12 @@ h2 {
     align-items: center;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+
 }
 
+
 .post-item:hover {
-    transform: translateX(5px);
+
     background: rgba(255, 255, 255, 0.15);
 }
 
@@ -145,11 +158,6 @@ h2 {
     margin: 10px 0;
 }
 
-button.smallbutton {
-    width: 58px;
-    height: 36px;
-    font-size: xx-small;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
