@@ -104,7 +104,48 @@ document.getElementById('addPostButton').addEventListener('click', () => {
     .catch(e => console.error('Error adding kid:', e));
 });
 
+// Add a gift to a kid
+function addGift(kidId, giftType) {
+    fetch(`${urlkid}/${kidId}`)
+        .then(res => res.json())
+        .then(kid => {
+            const updatedGifts = kid.gifts ? [...kid.gifts, giftType] : [giftType];
 
+            fetch(`${urlkid}/${kidId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ gifts: updatedGifts })
+            })
+            .then(() => {
+                fetchdatakid(); // Refresh the kids list to show updated gifts
+            })
+            .catch(e => console.error('Error updating kid with gift:', e));
+        })
+        .catch(e => console.error('Error fetching kid data:', e));
+}
+
+// Specific functions for each gift type
+function addBooks(kidId) {
+    addGift(kidId, 'Book');
+}
+
+function addClothes(kidId) {
+    addGift(kidId, 'Clothes');
+}
+
+function addDolls(kidId) {
+    addGift(kidId, 'Doll');
+}
+
+function addCars(kidId) {
+    addGift(kidId, 'Car');
+}
+
+function addCoals(kidId) {
+    addGift(kidId, 'Coal');
+}
 
 
 // Initial load
