@@ -4,25 +4,32 @@
       "id": "1",
       "name": "Julio",
       "age": 27,
-      "behavior": "good"
+      "behavior": "good",
+      "gifts": [
+        "Book",
+        "Doll"
+      ]
     },
     {
       "id": "1",
       "name": "Karel",
       "age": 27,
-      "behavior": "good"
+      "behavior": "good",
+      "gifts": []
     },
     {
       "id": "1",
       "name": "Josef",
       "age": 27,
-      "behavior": "bad"
+      "behavior": "bad",
+      "gifts": []
     },
     {
       "name": "Giette",
       "age": 25,
       "behavior": "bad",
-      "id": "UAIfTGs"
+      "id": "UAIfTGs",
+      "gifts": []
     }
   ],
   "toys": [
