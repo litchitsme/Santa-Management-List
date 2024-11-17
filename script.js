@@ -6,7 +6,7 @@ const toyOutput = document.getElementById('toyOutput')
 
 
 
-
+// Fetch and display kids
 function fetchdatakid() {
     output.innerHTML = '';
     fetch(urlkid)
@@ -25,11 +25,11 @@ function fetchdatakid() {
             sortedData.forEach(kids => {
                 output.innerHTML += `
                     <div class="post-item" id="post-${kids.id}">
-                        <span class="post-content">${kids.name} (${kids.age}) (${kids.behavior || 0})</span>
+                        <span class="post-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
                         <div class="edit-form" style="display: none;">
                             <input type="text" class="edit-title" value="${kids.name}">
                             <input type="number" class="edit-views" value="${kids.age}">
-                            <input type="number" class="edit-likes" value="${kids.behavior || 0}">
+                            <input type="number" class="edit-likes" value="${kids.behavior}">
                             <button class="smallbutton" onclick="saveEdit('${kids.id}')">S</button>
                             <button class="smallbutton" onclick="cancelEdit('${kids.id}')">X</button>
                         </div>
@@ -44,6 +44,7 @@ function fetchdatakid() {
         })
         .catch(e => console.error('Error fetching kids:', e));
 }
+// Fetch and display toys
 function fetchdatatoy() {
     toyOutput.innerHTML = '';
     fetch(urltoy)
@@ -70,7 +71,31 @@ function fetchdatatoy() {
         .catch(e => console.error('Error fetching toys:', e));
 }
 
-
+// Add new kid
+document.getElementById('addPostButton').addEventListener('click', () => {
+    const newPost = {
+        name: document.getElementById('name').value,
+        age: parseInt(document.getElementById('age').value),
+        behavior: document.getElementById('behavior').value
+        // timestamp: Date.now() // Add timestamp when creating new post
+    };
+    
+    fetch(urlkid, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newPost)
+    })
+    .then(res => res.json())
+    .then(() => {
+        fetchdata();
+        document.getElementById('name').value = '';
+        document.getElementById('age').value = '';
+        document.getElementById('behavior').value = '';
+    })
+    .catch(e => console.error('Error adding kid:', e));
+});
 
 
 
@@ -78,4 +103,3 @@ function fetchdatatoy() {
 // Initial load
 fetchdatakid();
 fetchdatatoy();
-// loadSavedPosts();
