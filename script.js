@@ -29,14 +29,21 @@ function fetchdatakid() {
                         <div class="edit-form" style="display: none;">
                             <input type="text" class="edit-title" value="${kids.name}">
                             <input type="number" class="edit-views" value="${kids.age}">
-                            <input type="number" class="edit-likes" value="${kids.behavior}">
+                            <input type="text" class="edit-likes" value="${kids.behavior}">
                             <button class="smallbutton" onclick="saveEdit('${kids.id}')">S</button>
                             <button class="smallbutton" onclick="cancelEdit('${kids.id}')">X</button>
                         </div>
                         <div class="button-group">
+                            <button class="smallbutton mx-1" onclick="addBooks('${kids.id}')"><i class="fa-solid fa-book"></i></button>
+                            <button class="smallbutton mx-1" onclick='addClothes("${kids.id}")'><i class="fa-solid fa-shirt"></i></button>
+                            <button class="smallbutton mx-1" onclick="addDolls('${kids.id}')"><i class="fa-solid fa-person"></i></button>
+                            <button class="smallbutton mx-1" onclick="addCars('${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
+                            <button class="redbutton2 smallbutton mx-1" onclick="addCoals('${kids.id}')"><i class="fa-solid fa-poop"></i></button>
+                        </div>
+                        <div class="button-group">
                             <button onclick="editPost('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, ${kids.behavior || 0}, ${kids.timestamp})">Save</button>
-                            <button onclick="deletePost('${kids.id}')">Delete</button>
+                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, ${kids.behavior}, ${kids.timestamp})">Save</button>
+                            <button class="redbutton" onclick="deletePost('${kids.id}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -63,7 +70,7 @@ function fetchdatatoy() {
             sortedData.forEach(toys => {
                 toyOutput.innerHTML += `
                     <div class="post-item" id="post-${toys.id}">
-                        <span class="post-content">${toys.type}</span>
+                        <span>${toys.type}</span>
                     </div>
                 `;
             });
