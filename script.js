@@ -4,8 +4,6 @@ const output = document.getElementById('output')
 const savedOutput = document.getElementById('savedOutput')
 const toyOutput = document.getElementById('toyOutput')
 
-
-
 // Fetch and display kids
 function fetchdatakid() {
     output.innerHTML = '';
@@ -46,7 +44,7 @@ function fetchdatakid() {
                         </div>
                         <div class="button-group">
                             <button onclick="editPost('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, ${kids.behavior}, ${kids.timestamp})">Save</button>
+                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp})">Save</button>
                             <button class="redbutton" onclick="deletePost('${kids.id}')">Delete</button>
                         </div>
                     </div>
@@ -180,6 +178,91 @@ function saveEdit(id) {
     .catch(e => console.error('Error updating post:', e));
 }
 
+function loadSavedPosts() {
+    try {
+        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+        savedOutput.innerHTML = '';
+        
+        if (savedPosts.length === 0) {
+            const noPostsMessage = document.createElement('div');
+            noPostsMessage.className = 'no-posts-message';
+            noPostsMessage.textContent = 'No saved posts yet!';
+            savedOutput.appendChild(noPostsMessage);
+            return;
+        }
+
+        // Sort saved posts by timestamp in descending order
+        savedPosts.sort((a, b) => b.timestamp - a.timestamp);
+        savedPosts.forEach(kid => {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post-item';
+            postDiv.innerHTML = `
+                <span>${kid.name} (${kid.age}) (${kid.behavior})</span>
+                <button onclick="removeFromSaved('${kid.id}')">Remove</button>
+            `;
+            savedOutput.appendChild(postDiv);
+        });
+    } catch (error) {
+        console.error('Error loading saved posts:', error);
+        localStorage.setItem('savedPosts', '[]');
+    }
+}
+
+// Save post to localStorage
+function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp) {
+    try {
+        const post = {
+            id: kidId,  // kidId is received as a string
+            name: kidName,
+            age: kidAge,
+            behavior: kidBehavior,
+            timestamp: timestamp
+        };
+        
+        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+        
+        if (!savedPosts.some(p => p.id === post.id)) {  // Comparing strings with strings
+            savedPosts.push(post);
+            localStorage.setItem('savedPosts', JSON.stringify(savedPosts));
+            loadSavedPosts();
+        } else {
+            alert('This kid is already saved!');
+        }
+    } catch (error) {
+        console.error('Error saving kid:', error);
+    }
+}
+
+// Remove post from saved posts
+function removeFromSaved(kidId) {
+    try {
+        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+        // Convert postId to string for consistent comparison
+        const kidIdString = String(kidId);
+        const updatedPosts = savedPosts.filter(kid => kid.id !== kidIdString);
+        localStorage.setItem('savedPosts', JSON.stringify(updatedPosts));
+        loadSavedPosts();
+    } catch (error) {
+        console.error('Error removing saved kid:', error);
+    }
+}
+
+// Delete post
+function deletePost(id) {
+    fetch(`${urlkid}/${id}`, {
+        method: 'DELETE'
+    })
+    .then(() => fetchdatakid())
+    .catch(e => console.error('Error deleting post:', e));
+}
+
+// Clear localStorage
+document.getElementById('clearStorage').addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all saved posts?')) {
+        localStorage.removeItem('savedPosts');
+        loadSavedPosts();
+    }
+});
 
 // Specific functions for each gift type
 function addBooks(kidId) {
@@ -206,3 +289,4 @@ function addCoals(kidId) {
 // Initial load
 fetchdatakid();
 fetchdatatoy();
+loadSavedPosts();
