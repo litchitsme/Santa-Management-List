@@ -84,6 +84,7 @@ function fetchdatatoy() {
 
 // Add new kid
 document.getElementById('addPostButton').addEventListener('click', () => {
+    // e.preventDefault();
     const name = document.getElementById('name').value.charAt(0).toUpperCase() + document.getElementById('name').value.slice(1).toLowerCase();
     const newPost = {
         name: name,
