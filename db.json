@@ -7,10 +7,10 @@
       "timestamp": 1732005263864,
       "id": "UAIfTGs",
       "giftStates": {
-        "books": true,
+        "books": false,
         "clothes": false,
-        "dolls": true,
-        "cars": true,
+        "dolls": false,
+        "cars": false,
         "coals": true
       }
     },
@@ -43,20 +43,6 @@
       }
     },
     {
-      "id": "b8e9",
-      "name": "Karel",
-      "age": null,
-      "behavior": "",
-      "timestamp": 1731932599729,
-      "giftStates": {
-        "books": false,
-        "clothes": false,
-        "dolls": false,
-        "cars": false,
-        "coals": false
-      }
-    },
-    {
       "id": "9576",
       "name": "Karel",
       "age": 18,
@@ -65,7 +51,7 @@
       "giftStates": {
         "books": false,
         "clothes": false,
-        "dolls": false,
+        "dolls": true,
         "cars": false,
         "coals": false
       }
@@ -77,10 +63,10 @@
       "timestamp": 1731932730231,
       "id": "90a1",
       "giftStates": {
-        "books": false,
+        "books": true,
         "clothes": false,
         "dolls": false,
-        "cars": false,
+        "cars": true,
         "coals": false
       }
     }
@@ -89,27 +75,27 @@
     {
       "id": "1",
       "type": "books",
-	"icon" : "<i class='fa-solid fa-book'></i>"
+      "icon": "<i class='fa-solid fa-book'></i>"
     },
     {
       "id": "2",
       "type": "clothes",
-"icon" : "<i class='fa-solid fa-shirt'></i>"
+      "icon": "<i class='fa-solid fa-shirt'></i>"
     },
     {
       "id": "3",
       "type": "dolls",
-"icon" : "<i class='fa-solid fa-person'></i>"
+      "icon": "<i class='fa-solid fa-person'></i>"
     },
     {
       "id": "4",
       "type": "cars",
-"icon" : "<i class='fa-solid fa-car-side'></i>"
+      "icon": "<i class='fa-solid fa-car-side'></i>"
     },
     {
       "id": "5",
       "type": "coal",
-"icon" : "<i class='fa-solid fa-poop'></i>"
+      "icon": "<i class='fa-solid fa-poop'></i>"
     }
   ]
 }

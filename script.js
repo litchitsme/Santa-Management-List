@@ -51,7 +51,7 @@ function fetchdatakid() {
                         </div>
                         <div class="button-group">
                             <button onclick="editPost('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp})">Save</button>
+                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp}, '${encodeURIComponent(JSON.stringify(kids.giftStates))}')">Save</button>
                             <button class="redbutton" onclick="deletePost('${kids.id}')">Delete</button>
                         </div>
                     </div>
@@ -234,13 +234,19 @@ function loadSavedPosts() {
             return;
         }
 
+
         // Sort saved posts by timestamp in descending order
         savedPosts.sort((a, b) => b.timestamp - a.timestamp);
         savedPosts.forEach(kid => {
+                        // Format the giftStates into a readable list of gifts
+                        const gifts = Object.keys(kid.giftStates)
+                        .filter(key => kid.giftStates[key]) // Include only true values
+                        // .map(gift => gift.charAt(0).toUpperCase() + gift.slice(1)) // Capitalize gift names
+                        .join(', ') || 'nothing'; // Default to 'nothing' if no gifts
             const postDiv = document.createElement('div');
             postDiv.className = 'post-item';
             postDiv.innerHTML = `
-                <span>${kid.name} (${kid.age}) (${kid.behavior})</span>
+                <span>${kid.name} has been a ${kid.behavior} and gets ${gifts}</span>
                 <button onclick="removeFromSaved('${kid.id}')">Remove</button>
             `;
             savedOutput.appendChild(postDiv);
@@ -252,19 +258,23 @@ function loadSavedPosts() {
 }
 
 // Save post to localStorage
-function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp) {
+function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStates) {
     try {
+        // Decode and parse the giftStates string
+        const giftStatesObject = JSON.parse(decodeURIComponent(kidGiftStates));
+        
         const post = {
-            id: kidId,  // kidId is received as a string
+            id: kidId,
             name: kidName,
             age: kidAge,
             behavior: kidBehavior,
-            timestamp: timestamp
+            timestamp: timestamp,
+            giftStates: giftStatesObject
         };
         
         const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
         
-        if (!savedPosts.some(p => p.id === post.id)) {  // Comparing strings with strings
+        if (!savedPosts.some(p => p.id === post.id)) {
             savedPosts.push(post);
             localStorage.setItem('savedPosts', JSON.stringify(savedPosts));
             loadSavedPosts();
@@ -275,6 +285,7 @@ function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp) {
         console.error('Error saving kid:', error);
     }
 }
+
 
 // Remove post from saved posts
 function removeFromSaved(kidId) {
