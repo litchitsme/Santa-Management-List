@@ -94,6 +94,10 @@ button:hover {
     backdrop-filter: none;
 }
 
+.deletebutton {
+    background: rgba(0, 255, 0, 0.4);
+}
+
 .redbutton {
     background: rgba(255, 0, 0, 0.2);
 }
@@ -102,6 +106,10 @@ button:hover {
     background: rgba(253, 0, 0, 0.5);
 }
 .redbutton2:hover {
+    background: rgba(253, 0, 0, 0.5);
+}
+
+.deletebutton2 {
     background: rgba(253, 0, 0, 0.5);
 }
 
@@ -127,6 +135,18 @@ h2 {
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.post-item2 {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 1rem 0rem;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
     align-items: center;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
