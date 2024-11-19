@@ -92,13 +92,15 @@ function fetchdatatoy() {
 document.getElementById('addPostButton').addEventListener('click', () => {
     // e.preventDefault();
     const name = document.getElementById('name').value.charAt(0).toUpperCase() + document.getElementById('name').value.slice(1).toLowerCase();
+    const behavior = document.getElementById('behavior').value.toLowerCase();
+
     const newPost = {
         name: name,
         age: parseInt(document.getElementById('age').value),
-        behavior: document.getElementById('behavior').value.toLowerCase(),
+        behavior: behavior,
         timestamp: Date.now() // Add timestamp when creating new post
     };
-    
+
     fetch(urlkid, {
         method: 'POST',
         headers: {
@@ -123,10 +125,26 @@ function addGift(kidId, giftType) {
         .then(res => res.json())
         .then(kid => {            
             // Update gift states
-            const updatedGiftStates = {
-                ...kid.giftStates,
-                [giftType.toLowerCase()]: true
-            };
+            let updatedGiftStates = { ...kid.giftStates };
+            let updatedBehavior = kid.behavior;
+            
+            if (giftType === 'Coals') {
+                // Reset all gift states to false
+                const keys = Object.keys(updatedGiftStates);
+                for(let key of keys) {
+                    updatedGiftStates[key] = false;
+                }
+                updatedGiftStates.coals = true;
+                updatedBehavior = 'bad';
+            }
+            else {
+                updatedGiftStates = {
+                    ...kid.giftStates,
+                    [giftType.toLowerCase()]: true,
+                    coals: false
+                };
+                updatedBehavior = 'good';
+            }
             
             fetch(`${urlkid}/${kidId}`, {
                 method: 'PATCH',
@@ -134,8 +152,9 @@ function addGift(kidId, giftType) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    giftStates: updatedGiftStates
-                })
+                    giftStates: updatedGiftStates,
+                    behavior: updatedBehavior
+                })            
             })
             .then(() => {
                 fetchdatakid();
@@ -190,35 +209,43 @@ function cancelEdit(id) {
 }
 
 function saveEdit(id) {
+    fetch(`${urlkid}/${id}`)
+        .then(res => res.json())
+        .then(kid => {
     // Get the edited values
-    const postDiv = document.getElementById(`post-${id}`);
-    const newName = postDiv.querySelector('.edit-name').value;
-    const newAge = parseInt(postDiv.querySelector('.edit-age').value);
-    const newBehavior = (postDiv.querySelector('.edit-behavior').value);
+            const postDiv = document.getElementById(`post-${id}`);
+            const newName = postDiv.querySelector('.edit-name').value;
+            const newAge = parseInt(postDiv.querySelector('.edit-age').value);
+            const newBehavior = (postDiv.querySelector('.edit-behavior').value);
 
-    // Create updated post object
-    const updatedPost = {
-        name: newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase(),
-        age: newAge,
-        behavior: newBehavior.toLowerCase(),
-        timestamp: Date.now() // Update timestamp
-    };
+            // Create updated post object
+            const updatedPost = {
+                name: newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase(),
+                age: newAge,
+                behavior: newBehavior.toLowerCase(),
+                timestamp: Date.now(), // Update timestamp
+                giftStates: {...kid.giftStates}
+            };
+        
 
     // Send PUT request to update the post
-    fetch(`${urlkid}/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedPost)
-    })
-    .then(res => res.json())
-    .then(() => {
-        // Refresh the posts display
-        fetchdatakid();
-        fetchdatatoy();
-    })
-    .catch(e => console.error('Error updating post:', e));
+            fetch(`${urlkid}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedPost)
+            })
+            .then(res => res.json())
+            .then(() => {
+                // Refresh the posts display
+                fetchdatakid();
+                fetchdatatoy();
+            })
+            .catch(e => console.error('Error updating post:', e));
+        }
+        )
+        .catch(e => console.error('Error fetching kid data:', e));
 }
 
 function loadSavedPosts() {
@@ -340,13 +367,13 @@ function removeCars(kidId) {
 }
 
 function addCoals(kidId) {
+
     addGift(kidId, 'Coals');
 }
 
 function removeCoals(kidId) {
     removeGift(kidId, 'Coals');
 }
-
 
 // Initial load
 fetchdatakid();
