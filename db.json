@@ -3,15 +3,15 @@
     {
       "name": "Giette",
       "age": 25,
-      "behavior": "bad",
+      "behavior": "good",
       "timestamp": 1732005263864,
       "id": "UAIfTGs",
       "giftStates": {
         "books": false,
-        "clothes": false,
+        "clothes": true,
         "dolls": false,
         "cars": false,
-        "coals": true
+        "coals": false
       }
     },
     {
@@ -49,8 +49,8 @@
       "behavior": "good",
       "timestamp": 1731932612052,
       "giftStates": {
-        "books": false,
-        "clothes": false,
+        "books": true,
+        "clothes": true,
         "dolls": false,
         "cars": true,
         "coals": false
@@ -59,15 +59,15 @@
     {
       "name": "Julio",
       "age": 25,
-      "behavior": "good",
+      "behavior": "bad",
       "timestamp": 1731932730231,
       "id": "90a1",
       "giftStates": {
         "books": false,
         "clothes": false,
-        "dolls": true,
+        "dolls": false,
         "cars": false,
-        "coals": false
+        "coals": true
       }
     }
   ],
