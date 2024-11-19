@@ -37,16 +37,16 @@ function fetchdatakid() {
                         </form>
                         <div class="actions-container">
                             <div class="button-group" id="button-group-${kids.id}">
-                                <button class="smallbutton mx-1 addbook" style="display: ${giftStates.books ? 'none' : 'block'};" onclick="addBooks('${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton deletebutton mx-1 removebook" style="display: ${giftStates.books ? 'block' : 'none'};" onclick="removeBooks('${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.clothes ? 'none' : 'block'};" onclick="addClothes('${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display: ${giftStates.clothes ? 'block' : 'none'};" onclick="removeClothes('${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.dolls ? 'none' : 'block'};" onclick="addDolls('${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.dolls ? 'block' : 'none'};" onclick="removeDolls('${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton mx-1" style="display : ${giftStates.cars ? 'none' : 'block'};" onclick="addCars('${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.cars ? 'block' : 'none'};" onclick="removeCars('${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="redbutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'none' : 'block'};" onclick="addCoals('${kids.id}')"><i class="fa-solid fa-poop"></i></button>
-                                <button class="deletebutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'block' : 'none'};" onclick="removeCoals('${kids.id}')"><i class="fa-solid fa-poop"></i></button>
+                                <button class="smallbutton mx-1 addbook" style="display: ${giftStates.books ? 'none' : 'block'};" onclick="addBooks(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
+                                <button class="smallbutton deletebutton mx-1 removebook" style="display: ${giftStates.books ? 'block' : 'none'};" onclick="removeBooks(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
+                                <button class="smallbutton mx-1" style="display: ${giftStates.clothes ? 'none' : 'block'};" onclick="addClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
+                                <button class="smallbutton deletebutton mx-1" style="display: ${giftStates.clothes ? 'block' : 'none'};" onclick="removeClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
+                                <button class="smallbutton mx-1" style="display: ${giftStates.dolls ? 'none' : 'block'};" onclick="addDolls(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
+                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.dolls ? 'block' : 'none'};" onclick="removeDolls(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
+                                <button class="smallbutton mx-1" style="display : ${giftStates.cars ? 'none' : 'block'};" onclick="addCars(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
+                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.cars ? 'block' : 'none'};" onclick="removeCars(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
+                                <button class="redbutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'none' : 'block'};" onclick="addCoals(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
+                                <button class="deletebutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'block' : 'none'};" onclick="removeCoals(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
                             </div>
                         </div>
                         <div class="button-group">
@@ -119,7 +119,8 @@ document.getElementById('addPostButton').addEventListener('click', () => {
 });
 
 // Add a gift to a kid
-function addGift(kidId, giftType) {
+function addGift(event, kidId, giftType) {
+    event.preventDefault();
     console.log(kidId, giftType);
     fetch(`${urlkid}/${kidId}`)
         .then(res => res.json())
@@ -164,7 +165,8 @@ function addGift(kidId, giftType) {
         .catch(e => console.error('Error fetching kid data:', e));
 }
 
-function removeGift(kidId, giftType) {
+function removeGift(event, kidId, giftType) {
+    event.preventDefault();
     fetch(`${urlkid}/${kidId}`)
         .then(res => res.json())
         .then(kid => {            
@@ -345,45 +347,44 @@ document.getElementById('clearStorage').addEventListener('click', () => {
     }
 });
 
-function addBooks(kidId) {
-    addGift(kidId, 'Books');
+function addBooks(event, kidId) {
+    addGift(event, kidId, 'Books');
 }
 
-function removeBooks(kidId) {
-    removeGift(kidId, 'Books');
+function removeBooks(event, kidId) {
+    removeGift(event, kidId, 'Books');
 }
 
-function addClothes(kidId) {
-    addGift(kidId, 'Clothes');
+function addClothes(event, kidId) {
+    addGift(event, kidId, 'Clothes');
 }
 
-function removeClothes(kidId) {
-    removeGift(kidId, 'Clothes');
+function removeClothes(event, kidId) {
+    removeGift(event, kidId, 'Clothes');
 }
 
-function addDolls(kidId) {
-    addGift(kidId, 'Dolls');
+function addDolls(event, kidId) {
+    addGift(event, kidId, 'Dolls');
 }
 
-function removeDolls(kidId) {
-    removeGift(kidId, 'Dolls');
+function removeDolls(event, kidId) {
+    removeGift(event, kidId, 'Dolls');
 }
 
-function addCars(kidId) {
-    addGift(kidId, 'Cars');
+function addCars(event, kidId) {
+    addGift(event, kidId, 'Cars');
 }
 
-function removeCars(kidId) {
-    removeGift(kidId, 'Cars');
+function removeCars(event, kidId) {
+    removeGift(event, kidId, 'Cars');
 }
 
-function addCoals(kidId) {
-
-    addGift(kidId, 'Coals');
+function addCoals(event, kidId) {
+    addGift(event, kidId, 'Coals');
 }
 
-function removeCoals(kidId) {
-    removeGift(kidId, 'Coals');
+function removeCoals(event, kidId) {
+    removeGift(event, kidId, 'Coals');
 }
 
 // Initial load
