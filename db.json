@@ -46,13 +46,13 @@
       "id": "9576",
       "name": "Karel",
       "age": 18,
-      "behavior": "bad",
+      "behavior": "good",
       "timestamp": 1731932612052,
       "giftStates": {
         "books": false,
         "clothes": false,
-        "dolls": true,
-        "cars": false,
+        "dolls": false,
+        "cars": true,
         "coals": false
       }
     },
@@ -63,10 +63,10 @@
       "timestamp": 1731932730231,
       "id": "90a1",
       "giftStates": {
-        "books": true,
+        "books": false,
         "clothes": false,
-        "dolls": false,
-        "cars": true,
+        "dolls": true,
+        "cars": false,
         "coals": false
       }
     }

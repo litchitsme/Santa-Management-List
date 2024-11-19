@@ -113,6 +113,10 @@ button:hover {
     background: rgba(253, 0, 0, 0.5);
 }
 
+.deletebutton2:hover {
+    background: rgba(253, 0, 0, 0.5);
+}
+
 /* Posts Section */
 .saved-posts {
     margin-top: 2rem;
@@ -204,4 +208,9 @@ h2 {
         gap: 1rem;
         text-align: center;
     }
+}
+
+.link {
+    color: #ffffff;
+    text-decoration: none;
 }
