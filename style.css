@@ -7,9 +7,13 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #13441b, #448d27, #215e2b);
+    background-image: url('background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     padding: 2rem;
-    color: #fff;
+    color: white;
 }
 
 .container {
@@ -49,7 +53,7 @@ input {
     min-width: 200px;
     padding: 12px 20px;
     border: none;
-    background: rgba(255, 255, 255, 0.1);
+    background: #d5af6987;
     backdrop-filter: blur(10px);
     border-radius: 8px;
     color: white;
@@ -87,6 +91,10 @@ button:hover {
     transform: translateY(-2px);
 }
 
+.kiddobutton {
+    background-color: #d5af6987;
+}
+
 .smallbutton {
     background: none;
     border: none;
@@ -121,7 +129,7 @@ button:hover {
 .saved-posts {
     margin-top: 2rem;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(167 140 0 / 11%);
     backdrop-filter: blur(10px);
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -133,7 +141,7 @@ h2 {
 }
 
 .post-item {
-    background: rgba(255, 255, 255, 0.1);
+    background: #d5af6987;
     margin: 1rem 0;
     padding: 1rem;
     border-radius: 8px;
@@ -145,7 +153,7 @@ h2 {
 }
 
 .post-item2 {
-    background: rgba(255, 255, 255, 0.1);
+    background: #d5af6987;
     margin: 1rem 0rem;
     padding: 1rem;
     border-radius: 8px;
@@ -169,7 +177,7 @@ h2 {
 
 .post-item:hover {
 
-    background: rgba(255, 255, 255, 0.15);
+    background: #ffd27e87;
 }
 
 .button-group {
@@ -213,4 +221,12 @@ h2 {
 .link {
     color: #ffffff;
     text-decoration: none;
+}
+.link:hover {
+    color: rgb(110, 0, 0);
+}
+.footer {
+    background: #e13039c5;
+    backdrop-filter: blur(10px);
+    
 }
