@@ -63,12 +63,12 @@ input {
 }
 
 input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
 }
 
 input:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.15);
+    background: #d5af69d7;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
