@@ -7,74 +7,46 @@
       "timestamp": 1732005263864,
       "id": "UAIfTGs",
       "giftStates": {
-        "books": false,
+        "book": false,
         "clothes": true,
-        "dolls": false,
-        "cars": false,
-        "coals": false
+        "doll": false,
+        "car": false,
+        "coal": false
       }
     },
     {
-      "name": "Karel",
-      "age": 50,
-      "behavior": "lucky",
-      "timestamp": 1731932064642,
-      "id": "14ca",
-      "giftStates": {
-        "books": false,
-        "clothes": false,
-        "dolls": false,
-        "cars": false,
-        "coals": false
-      }
-    },
-    {
-      "id": "ba79",
       "name": "Karel",
       "age": 28,
       "behavior": "bad",
-      "timestamp": 1731932012927,
+      "timestamp": 1732056198648,
       "giftStates": {
-        "books": false,
+        "book": false,
         "clothes": false,
-        "dolls": false,
-        "cars": false,
-        "coals": false
-      }
-    },
-    {
-      "id": "9576",
-      "name": "Karel",
-      "age": 18,
-      "behavior": "good",
-      "timestamp": 1731932612052,
-      "giftStates": {
-        "books": true,
-        "clothes": true,
-        "dolls": false,
-        "cars": true,
-        "coals": false
-      }
+        "doll": false,
+        "car": false,
+        "coal": true
+      },
+      "id": "ba79"
     },
     {
       "name": "Julio",
       "age": 25,
-      "behavior": "bad",
-      "timestamp": 1731932730231,
-      "id": "90a1",
+      "behavior": "good",
+      "timestamp": 1732056105925,
       "giftStates": {
-        "books": false,
-        "clothes": false,
-        "dolls": false,
-        "cars": false,
-        "coals": true
-      }
+        "book": false,
+        "clothes": true,
+        "doll": false,
+        "car": false,
+        "coal": false
+      },
+      "id": "90a1"
     }
   ],
   "toys": [
     {
       "id": "1",
-      "type": "books",
+      "type": "book",
       "icon": "<i class='fa-solid fa-book'></i>"
     },
     {
@@ -84,12 +56,12 @@
     },
     {
       "id": "3",
-      "type": "dolls",
+      "type": "doll",
       "icon": "<i class='fa-solid fa-person'></i>"
     },
     {
       "id": "4",
-      "type": "cars",
+      "type": "car",
       "icon": "<i class='fa-solid fa-car-side'></i>"
     },
     {
