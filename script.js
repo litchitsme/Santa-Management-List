@@ -7,25 +7,29 @@ const hiddenButtons = {};
 
 // Fetch and display kids
 function fetchdatakid() {
+    // Empty output
     output.innerHTML = '';
+    // Get right data
     fetch(urlkid)
         .then(res => res.json())
         .then(data => {
+            // Check if data is empty
             if (data.length === 0) {
-                const noPostsMessage = document.createElement('div');
-                noPostsMessage.className = 'no-posts-message';
-                noPostsMessage.textContent = 'No posts available. Add your first post!';
-                output.appendChild(noPostsMessage);
+                const noKidsMessage = document.createElement('div');
+                noKidsMessage.className = 'no-kids-message';
+                noKidsMessage.textContent = 'No kids available. Add your first kid!';
+                output.appendChild(noKidsMessage);
                 return;
             }
             
-            // Sort posts by timestamp in descending order
+            // Sort kids by timestamp in descending order
             const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
             sortedData.forEach(kids => {
                 const giftStates = kids.giftStates || {};
+                // Fill output (info about kid, edit kid, buttons to add toys, edit/save/delete kid)
                 output.innerHTML += `
-                    <div class="post-item" id="post-${kids.id}">
-                        <span class="post-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
+                    <div class="kid-item" id="kid-${kids.id}">
+                        <span class="kid-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
                         <form>
                             <div class="edit-form" style="display: none;">
                                 <input type="text" class="edit-name" value="${kids.name}" required>
@@ -50,9 +54,9 @@ function fetchdatakid() {
                             </div>
                         </div>
                         <div class="button-group">
-                            <button onclick="editPost('${kids.id}')">Edit</button>
+                            <button onclick="editKid('${kids.id}')">Edit</button>
                             <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp}, '${encodeURIComponent(JSON.stringify(kids.giftStates))}')">Save</button>
-                            <button class="redbutton" onclick="deletePost('${kids.id}')">Delete</button>
+                            <button class="redbutton" onclick="deleteKid('${kids.id}')">Delete</button>
                         </div>
                     </div>
                 `;
@@ -60,25 +64,28 @@ function fetchdatakid() {
         })
         .catch(e => console.error('Error fetching kids:', e));
 }
+
 // Fetch and display toys
 function fetchdatatoy() {
+    // Clear existing toys
     toyOutput.innerHTML = '';
+    // Get toys
     fetch(urltoy)
         .then(res => res.json())
         .then(data => {
             if (data.length === 0) {
-                const noPostsMessage = document.createElement('div');
-                noPostsMessage.className = 'no-posts-message';
-                noPostsMessage.textContent = 'No posts available. Add your first post!';
-                output.appendChild(noPostsMessage);
+                const noKidsMessage = document.createElement('div');
+                noKidsMessage.className = 'no-kids-message';
+                noKidsMessage.textContent = 'No kids available. Add your first kid!';
+                output.appendChild(noKidsMessage);
                 return;
             }
             
-            // Sort posts by timestamp in descending order
+            // Sort kids by timestamp in descending order
             const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
             sortedData.forEach(toys => {
                 toyOutput.innerHTML += `
-                    <div class="post-item2" id="post-${toys.id}">
+                    <div class="kid-item2" id="kid-${toys.id}">
                         <span class="mx-1">${toys.icon}</span>
                         <span class="mx-1">${toys.type}</span>
                     </div>
@@ -89,24 +96,25 @@ function fetchdatatoy() {
 }
 
 // Add new kid
-document.getElementById('addPostButton').addEventListener('click', () => {
-    // e.preventDefault();
+document.getElementById('addKidsButton').addEventListener('click', () => {
+    // Add data to newKid
     const name = document.getElementById('name').value.charAt(0).toUpperCase() + document.getElementById('name').value.slice(1).toLowerCase();
     const behavior = document.getElementById('behavior').value.toLowerCase();
 
-    const newPost = {
+    const newKid = {
         name: name,
         age: parseInt(document.getElementById('age').value),
         behavior: behavior,
-        timestamp: Date.now() // Add timestamp when creating new post
+        timestamp: Date.now() // Add timestamp when creating new kid
     };
 
+    // Add new kid
     fetch(urlkid, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newPost)
+        body: JSON.stringify(newKid)
     })
     .then(res => res.json())
     .then(() => {
@@ -120,8 +128,8 @@ document.getElementById('addPostButton').addEventListener('click', () => {
 
 // Add a gift to a kid
 function addGift(event, kidId, giftType) {
+    // Prevent default form submission 
     event.preventDefault();
-    console.log(kidId, giftType);
     fetch(`${urlkid}/${kidId}`)
         .then(res => res.json())
         .then(kid => {            
@@ -135,18 +143,23 @@ function addGift(event, kidId, giftType) {
                 for(let key of keys) {
                     updatedGiftStates[key] = false;
                 }
+                // Set coals to true and behavior to 'bad'
                 updatedGiftStates.coals = true;
                 updatedBehavior = 'bad';
             }
             else {
+                // Set the right gift state to true
                 updatedGiftStates = {
                     ...kid.giftStates,
                     [giftType.toLowerCase()]: true,
+                    // Make sure coals is false
                     coals: false
                 };
+                // Make sure behavior is 'good'
                 updatedBehavior = 'good';
             }
             
+            // Update kid
             fetch(`${urlkid}/${kidId}`, {
                 method: 'PATCH',
                 headers: {
@@ -165,7 +178,9 @@ function addGift(event, kidId, giftType) {
         .catch(e => console.error('Error fetching kid data:', e));
 }
 
+// Remove a gift from a kid
 function removeGift(event, kidId, giftType) {
+    // Prevent default form submission
     event.preventDefault();
     fetch(`${urlkid}/${kidId}`)
         .then(res => res.json())
@@ -176,6 +191,7 @@ function removeGift(event, kidId, giftType) {
                 [giftType.toLowerCase()]: false
             };
             
+            // Update kid
             fetch(`${urlkid}/${kidId}`, {
                 method: 'PATCH',
                 headers: {
@@ -193,35 +209,87 @@ function removeGift(event, kidId, giftType) {
         .catch(e => console.error('Error fetching kid data:', e));
 }
 
-function editPost(id) {
-    // Show edit form and hide content for the selected post
-    const postDiv = document.getElementById(`post-${id}`);
-    console.log(postDiv);
-    postDiv.querySelector('.post-content').style.display = 'none';
-    postDiv.querySelector('.edit-form').style.display = 'block';
-    postDiv.querySelector('.button-group').style.display = 'none';
+// Add books
+function addBooks(event, kidId) {
+    addGift(event, kidId, 'Books');
 }
 
+// Remove books
+function removeBooks(event, kidId) {
+    removeGift(event, kidId, 'Books');
+}
+
+// Add clothes
+function addClothes(event, kidId) {
+    addGift(event, kidId, 'Clothes');
+}
+
+// Remove clothes
+function removeClothes(event, kidId) {
+    removeGift(event, kidId, 'Clothes');
+}
+
+// Add dolls
+function addDolls(event, kidId) {
+    addGift(event, kidId, 'Dolls');
+}
+
+// Remove dolls
+function removeDolls(event, kidId) {
+    removeGift(event, kidId, 'Dolls');
+}
+
+// Add cars
+function addCars(event, kidId) {
+    addGift(event, kidId, 'Cars');
+}
+
+// Remove cars
+function removeCars(event, kidId) {
+    removeGift(event, kidId, 'Cars');
+}
+
+// Add coals
+function addCoals(event, kidId) {
+    addGift(event, kidId, 'Coals');
+}
+
+// Remove coals
+function removeCoals(event, kidId) {
+    removeGift(event, kidId, 'Coals');
+}
+
+// Edit a kid
+function editKid(id) {
+    // Show edit form and hide content for the selected kid
+    const kidDiv = document.getElementById(`kid-${id}`);
+    kidDiv.querySelector('.kid-content').style.display = 'none';
+    kidDiv.querySelector('.edit-form').style.display = 'block';
+    kidDiv.querySelector('.button-group').style.display = 'none';
+}
+
+// Cancel edit
 function cancelEdit(id) {
     // Hide edit form and show content
-    const postDiv = document.getElementById(`post-${id}`);
-    postDiv.querySelector('.post-content').style.display = 'block';
-    postDiv.querySelector('.edit-form').style.display = 'none';
-    postDiv.querySelector('.button-group').style.display = 'block';
+    const kidDiv = document.getElementById(`kid-${id}`);
+    kidDiv.querySelector('.kid-content').style.display = 'block';
+    kidDiv.querySelector('.edit-form').style.display = 'none';
+    kidDiv.querySelector('.button-group').style.display = 'block';
 }
 
+// Save edit
 function saveEdit(id) {
     fetch(`${urlkid}/${id}`)
         .then(res => res.json())
         .then(kid => {
     // Get the edited values
-            const postDiv = document.getElementById(`post-${id}`);
-            const newName = postDiv.querySelector('.edit-name').value;
-            const newAge = parseInt(postDiv.querySelector('.edit-age').value);
-            const newBehavior = (postDiv.querySelector('.edit-behavior').value);
+            const kidDiv = document.getElementById(`kid-${id}`);
+            const newName = kidDiv.querySelector('.edit-name').value;
+            const newAge = parseInt(kidDiv.querySelector('.edit-age').value);
+            const newBehavior = (kidDiv.querySelector('.edit-behavior').value);
 
-            // Create updated post object
-            const updatedPost = {
+            // Create updated kid object
+            const updatedKid = {
                 name: newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase(),
                 age: newAge,
                 behavior: newBehavior.toLowerCase(),
@@ -230,69 +298,82 @@ function saveEdit(id) {
             };
         
 
-    // Send PUT request to update the post
+    // Send PUT request to update the kid
             fetch(`${urlkid}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedPost)
+                body: JSON.stringify(updatedKid)
             })
             .then(res => res.json())
             .then(() => {
-                // Refresh the posts display
+                // Refresh the kids display
                 fetchdatakid();
                 fetchdatatoy();
             })
-            .catch(e => console.error('Error updating post:', e));
+            .catch(e => console.error('Error updating kid:', e));
         }
         )
         .catch(e => console.error('Error fetching kid data:', e));
 }
 
-function loadSavedPosts() {
+// Delete kid
+function deleteKid(id) {
+    fetch(`${urlkid}/${id}`, {
+        method: 'DELETE'
+    })
+    .then(() => fetchdatakid())
+    .catch(e => console.error('Error deleting kid:', e));
+}
+
+function loadSavedKids() {
     try {
-        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+        // Get saved kids
+        const savedKids = JSON.parse(localStorage.getItem('savedKids') || '[]');
         savedOutput.innerHTML = '';
         
-        if (savedPosts.length === 0) {
-            const noPostsMessage = document.createElement('div');
-            noPostsMessage.className = 'no-posts-message';
-            noPostsMessage.textContent = 'No saved posts yet!';
-            savedOutput.appendChild(noPostsMessage);
+        // Check if there are saved kids
+        if (savedKids.length === 0) {
+            const noKidsMessage = document.createElement('div');
+            noKidsMessage.className = 'no-kids-message';
+            noKidsMessage.textContent = 'No saved kids yet!';
+            savedOutput.appendChild(noKidsMessage);
             return;
         }
 
 
-        // Sort saved posts by timestamp in descending order
-        savedPosts.sort((a, b) => b.timestamp - a.timestamp);
-        savedPosts.forEach(kid => {
+        // Sort saved kids by timestamp in descending order
+        savedKids.sort((a, b) => b.timestamp - a.timestamp);
+        savedKids.forEach(kid => {
                         // Format the giftStates into a readable list of gifts
                         const gifts = Object.keys(kid.giftStates)
                         .filter(key => kid.giftStates[key]) // Include only true values
                         // .map(gift => gift.charAt(0).toUpperCase() + gift.slice(1)) // Capitalize gift names
                         .join(', ') || 'nothing'; // Default to 'nothing' if no gifts
-            const postDiv = document.createElement('div');
-            postDiv.className = 'post-item';
-            postDiv.innerHTML = `
+            const kidDiv = document.createElement('div');
+            kidDiv.className = 'kid-item';
+            kidDiv.innerHTML = `
                 <span>${kid.name} has been a ${kid.behavior} and gets ${gifts}</span>
                 <button onclick="removeFromSaved('${kid.id}')">Remove</button>
             `;
-            savedOutput.appendChild(postDiv);
+            // Append kidDiv to savedOutput
+            savedOutput.appendChild(kidDiv);
         });
     } catch (error) {
-        console.error('Error loading saved posts:', error);
-        localStorage.setItem('savedPosts', '[]');
+        console.error('Error loading saved kids:', error);
+        localStorage.setItem('savedKids', '[]');
     }
 }
 
-// Save post to localStorage
+// Save kid to localStorage
 function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStates) {
     try {
         // Decode and parse the giftStates string
         const giftStatesObject = JSON.parse(decodeURIComponent(kidGiftStates));
         
-        const post = {
+        // Create kid object
+        const kid = {
             id: kidId,
             name: kidName,
             age: kidAge,
@@ -301,12 +382,21 @@ function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStat
             giftStates: giftStatesObject
         };
         
-        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
+        // Delete kid from database
+        fetch(`${urlkid}/${kidId}`, {
+            method: 'DELETE'            
+        })
+        .then(() => fetchdatakid())
+        .catch(e => console.error('Error deleting kid:', e));
         
-        if (!savedPosts.some(p => p.id === post.id)) {
-            savedPosts.push(post);
-            localStorage.setItem('savedPosts', JSON.stringify(savedPosts));
-            loadSavedPosts();
+        // Get all saved kids
+        const savedKids = JSON.parse(localStorage.getItem('savedKids') || '[]');
+        
+        // Check if kid is already saved
+        if (!savedKids.some(p => p.id === kid.id)) {
+            savedKids.push(kid);
+            localStorage.setItem('savedKids', JSON.stringify(savedKids));
+            loadSavedKids();
         } else {
             alert('This kid is already saved!');
         }
@@ -315,79 +405,29 @@ function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStat
     }
 }
 
-
-// Remove post from saved posts
+// Remove kid from saved Kids
 function removeFromSaved(kidId) {
     try {
-        const savedPosts = JSON.parse(localStorage.getItem('savedPosts') || '[]');
-        // Convert postId to string for consistent comparison
+        const savedKids = JSON.parse(localStorage.getItem('savedKids') || '[]');
+        // Convert kidId to string for consistent comparison
         const kidIdString = String(kidId);
-        const updatedPosts = savedPosts.filter(kid => kid.id !== kidIdString);
-        localStorage.setItem('savedPosts', JSON.stringify(updatedPosts));
-        loadSavedPosts();
+        const updatedKids = savedKids.filter(kid => kid.id !== kidIdString);
+        localStorage.setItem('savedKids', JSON.stringify(updatedKids));
+        loadSavedKids();
     } catch (error) {
         console.error('Error removing saved kid:', error);
     }
 }
 
-// Delete post
-function deletePost(id) {
-    fetch(`${urlkid}/${id}`, {
-        method: 'DELETE'
-    })
-    .then(() => fetchdatakid())
-    .catch(e => console.error('Error deleting post:', e));
-}
-
 // Clear localStorage
 document.getElementById('clearStorage').addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear all saved posts?')) {
-        localStorage.removeItem('savedPosts');
-        loadSavedPosts();
+    if (confirm('Are you sure you want to clear all saved kids?')) {
+        localStorage.removeItem('savedKids');
+        loadSavedKids();
     }
 });
-
-function addBooks(event, kidId) {
-    addGift(event, kidId, 'Books');
-}
-
-function removeBooks(event, kidId) {
-    removeGift(event, kidId, 'Books');
-}
-
-function addClothes(event, kidId) {
-    addGift(event, kidId, 'Clothes');
-}
-
-function removeClothes(event, kidId) {
-    removeGift(event, kidId, 'Clothes');
-}
-
-function addDolls(event, kidId) {
-    addGift(event, kidId, 'Dolls');
-}
-
-function removeDolls(event, kidId) {
-    removeGift(event, kidId, 'Dolls');
-}
-
-function addCars(event, kidId) {
-    addGift(event, kidId, 'Cars');
-}
-
-function removeCars(event, kidId) {
-    removeGift(event, kidId, 'Cars');
-}
-
-function addCoals(event, kidId) {
-    addGift(event, kidId, 'Coals');
-}
-
-function removeCoals(event, kidId) {
-    removeGift(event, kidId, 'Coals');
-}
 
 // Initial load
 fetchdatakid();
 fetchdatatoy();
-loadSavedPosts();
+loadSavedKids();
