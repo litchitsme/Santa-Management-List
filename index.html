@@ -10,37 +10,44 @@
 </head>
 <body>
     <div class="container">
+        <h1>Santa's Management</h1>
+
+        <!-- All Kid Info -->
         <div>
-            <h1>Santa's Management</h1>
         
-            <!-- Add Post Form -->
+            <!-- Add Kid Form -->
             <form>
                 <div class="input-group">
                     <input type="text" id="name" placeholder="Name" required>
                     <input type="number" id="age" placeholder="Age" required>
                     <input type="text" id="behavior" placeholder="Good/Bad" required>
+
                     <button class="kiddobutton" id="addPostButton" type="submit">Add kiddo</button>
                 </div>
             </form>
             
+            <!-- CLears localStorage -->
             <div class="button-group">
                 <button class="redbutton" id="clearStorage">Clear the magic bag</button>
             </div>
             
+            <!-- Kids Section -->
             <div id="output"></div>
             
-            <!-- Saved Posts Section -->
-            <div class="saved-posts">
+            <!-- Saved Kids Section -->
+            <div class="saved-kids">
                 <h2>List of Kiddos and their Presents</h2>
                 <div id="savedOutput"></div>
             </div>
         </div>
-            
+        
+        <!-- Toys Section -->
         <div>
             <h1>Toy list</h1>
             <div id="toyOutput"></div>
         </div>
     </div>
+
     <div class="footer p-3 text-center">
         <p>&copy; 2024 Santa's Management. Brought to you from the <a href="https://earth.google.com/web/@87.58003955,-101.04393177,-2741.3659163a,6986232.70852804d,35y,154.98489744h,0.99685021t,360r/data=ClEaSxJFCiUweDRmOTM0NGRhOTUxNWI5NTE6MHg0NTE4ZDBjNGQ1YzY4ODc2GTWglP__f1ZAIQAAAAAA4GDAKgpOb3J0aCBQb2xlGAEgAUICCAFCAggASg0I____________ARAA" 
             target="_blank" class="link">North pole</a>.</p>
