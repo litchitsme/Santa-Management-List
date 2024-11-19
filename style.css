@@ -223,10 +223,17 @@ h2 {
     text-decoration: none;
 }
 .link:hover {
-    color: rgb(110, 0, 0);
+    color: rgb(0, 94, 20);
 }
 .footer {
-    background: #e13039c5;
-    backdrop-filter: blur(10px);
-    
+    position: fixed; /* Stays fixed on the screen */
+    bottom: 0; /* Aligns it to the bottom of the screen */
+    left: 0; /* Ensures it starts from the very left */
+    width: 100%; /* Spans the entire width of the page */
+    background: #e13039c5; /* Your desired background color */
+    backdrop-filter: blur(10px); /* Applies blur effect */
+    color: #fff; /* Adjust text color for better visibility */
+    text-align: center; /* Centers text inside the footer */
+    padding: 10px; /* Adds some padding for better aesthetics */
+    z-index: 1000; /* Ensures it stays on top of other elements */
 }
