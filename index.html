@@ -10,41 +10,51 @@
 </head>
 <body>
     <div class="container mt-5">
-        
+        <div class="row">
 
-        <!-- All Kid Info -->
-        <div>
-            <h1>Santa's Management</h1>
-            <!-- Add Kid Form -->
-            <form>
-                <div class="input-group">
-                    <input type="text" id="name" placeholder="Name" required>
-                    <input type="number" id="age" placeholder="Age" required>
-                    <input type="text" id="behavior" placeholder="Good/Bad" required>
+            <!-- All Kid Info -->
+            <div class="col-lg-10">
+                <h1>Santa's Management</h1>
+                <!-- Add Kid Form -->
+                <form>
+                    <div class="input-group">
+                        <input type="text" id="name" placeholder="Name" required>
+                        <input type="number" id="age" placeholder="Age" required>
+                        <input type="text" id="behavior" placeholder="Good/Bad" required>
 
-                    <button class="kiddobutton" id="addKidsButton" type="submit">Add kiddo</button>
+                        <button class="kiddobutton" id="addKidsButton" type="submit">Add kiddo</button>
+                    </div>
+                </form>
+                
+                <!-- CLears localStorage -->
+                <div class="button-group">
+                    <button class="redbutton" id="clearStorage">Clear the magic bag</button>
                 </div>
-            </form>
-            
-            <!-- CLears localStorage -->
-            <div class="button-group">
-                <button class="redbutton" id="clearStorage">Clear the magic bag</button>
+                
+                <!-- Kids Section -->
+                <div id="output"></div>
+                
+                <!-- Saved Kids Section -->
+                <div class="saved-kids">
+                    <h2>List of Kiddos and their Presents</h2>
+                    <div id="savedOutput"></div>
+                </div>
             </div>
             
-            <!-- Kids Section -->
-            <div id="output"></div>
-            
-            <!-- Saved Kids Section -->
-            <div class="saved-kids">
-                <h2>List of Kiddos and their Presents</h2>
-                <div id="savedOutput"></div>
+            <!-- Toys Section -->
+            <div class="col-lg-2">
+                <h1>Toy list</h1>
+                <form>
+                    <input class="my-1" type="text" id="toyType" placeholder="Toy type (e.g. bicycle)" required>
+                    <input class="my-1" type="text" id="toyIcon" placeholder="Font Awesome icon class (e.g. fa-solid fa-bicycle)" required>
+                    <input class="my-1" type="text" id="toyDisplay" placeholder="Toy display">
+                    <label class="text-black my-1">
+                        <input type="checkbox" id="toySpecial"> Is Special Toy?
+                    </label>
+                    <button class="kiddobutton" id="addToyButton" type="submit">Add Toy</button>
+                </form>
+                <div id="toyOutput" class=""></div>
             </div>
-        </div>
-        
-        <!-- Toys Section -->
-        <div>
-            <h1>Toy list</h1>
-            <div id="toyOutput"></div>
         </div>
     </div>
 

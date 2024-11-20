@@ -4,65 +4,57 @@ const output = document.getElementById('output')
 const savedOutput = document.getElementById('savedOutput')
 const toyOutput = document.getElementById('toyOutput')
 const hiddenButtons = {};
+window.TOYS = {};
+
 
 // Fetch and display kids
-function fetchdatakid() {
-    // Empty output
-    output.innerHTML = '';
-    // Get right data
-    fetch(urlkid)
-        .then(res => res.json())
-        .then(data => {
-            // Check if data is empty
-            if (data.length === 0) {
-                const noKidsMessage = document.createElement('div');
-                noKidsMessage.className = 'no-kids-message';
-                noKidsMessage.textContent = 'No kids available. Add your first kid!';
-                output.appendChild(noKidsMessage);
-                return;
-            }
+async function fetchdatakid() {
+    try {
+        output.innerHTML = '';
+        const res = await fetch(urlkid);
+        const data = await res.json();
+        
+        if (data.length === 0) {
+            const noKidsMessage = document.createElement('div');
+            noKidsMessage.className = 'no-kids-message';
+            noKidsMessage.textContent = 'No kids available. Add your first kid!';
+            output.appendChild(noKidsMessage);
+            return;
+        }
+        
+        const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
+        sortedData.forEach(kids => {
+            const giftStates = kids.giftStates || {};
+            const buttonGroupHTML = generateGiftButtons(kids.id, giftStates);
             
-            // Sort kids by timestamp in descending order
-            const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
-            sortedData.forEach(kids => {
-                const giftStates = kids.giftStates || {};
-                // Fill output (info about kid, edit kid, buttons to add toys, edit/save/delete kid)
-                output.innerHTML += `
-                    <div class="kid-item" id="kid-${kids.id}">
-                        <span class="kid-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
-                        <form>
-                            <div class="edit-form" style="display: none;">
-                                <input type="text" class="edit-name" value="${kids.name}" required>
-                                <input type="number" class="edit-age" value="${kids.age}" required>
-                                <input type="text" class="edit-behavior" value="${kids.behavior}" required>
-                                <button class="smallbutton" onclick="saveEdit('${kids.id}')">S</button>
-                                <button class="smallbutton" onclick="cancelEdit('${kids.id}')">X</button>
-                            </div>
-                        </form>
-                        <div class="actions-container">
-                            <div class="button-group" id="button-group-${kids.id}">
-                                <button class="smallbutton mx-1 addbook" style="display: ${giftStates.books ? 'none' : 'block'};" onclick="addBooks(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton deletebutton mx-1 removebook" style="display: ${giftStates.books ? 'block' : 'none'};" onclick="removeBooks(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.clothes ? 'none' : 'block'};" onclick="addClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display: ${giftStates.clothes ? 'block' : 'none'};" onclick="removeClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.dolls ? 'none' : 'block'};" onclick="addDolls(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.dolls ? 'block' : 'none'};" onclick="removeDolls(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton mx-1" style="display : ${giftStates.cars ? 'none' : 'block'};" onclick="addCars(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.cars ? 'block' : 'none'};" onclick="removeCars(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="redbutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'none' : 'block'};" onclick="addCoals(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
-                                <button class="deletebutton2 smallbutton mx-1" style="display : ${giftStates.coals ? 'block' : 'none'};" onclick="removeCoals(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
-                            </div>
+            output.innerHTML += `
+                <div class="kid-item" id="kid-${kids.id}">
+                    <span class="kid-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
+                    <form>
+                        <div class="edit-form" style="display: none;">
+                            <input type="text" class="edit-name" value="${kids.name}" required>
+                            <input type="number" class="edit-age" value="${kids.age}" required>
+                            <input type="text" class="edit-behavior" value="${kids.behavior}" required>
+                            <button class="smallbutton" onclick="saveEdit('${kids.id}', event)">S</button>
+                            <button class="smallbutton" onclick="cancelEdit('${kids.id}', event)">X</button>
                         </div>
-                        <div class="button-group">
-                            <button onclick="editKid('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp}, '${encodeURIComponent(JSON.stringify(kids.giftStates))}')">Save</button>
-                            <button class="redbutton" onclick="deleteKid('${kids.id}')">Delete</button>
+                    </form>
+                    <div class="actions-container">
+                        <div class="button-group" id="button-group-${kids.id}">
+                            ${buttonGroupHTML}
                         </div>
                     </div>
-                `;
-            });
-        })
-        .catch(e => console.error('Error fetching kids:', e));
+                    <div class="button-group">
+                        <button onclick="editKid('${kids.id}')">Edit</button>
+                        <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp}, '${encodeURIComponent(JSON.stringify(kids.giftStates))}', event)">Save</button>
+                        <button class="redbutton" onclick="deleteKid('${kids.id}', event)">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    } catch (e) {
+        console.error('Error fetching kids:', e);
+    }
 }
 
 // Fetch and display toys
@@ -126,6 +118,96 @@ document.getElementById('addKidsButton').addEventListener('click', () => {
     .catch(e => console.error('Error adding kid:', e));
 });
 
+// Add new toy
+function addNewToy(event) {
+    event.preventDefault();
+
+    // Immediately Invoked Function Expression (IIFE) to handle async logic
+    (async function () {
+        // Get values from form
+        const type = document.getElementById('toyType').value;
+        const icon = document.getElementById('toyIcon').value;
+        const isSpecial = document.getElementById('toySpecial').checked;
+
+        const newToy = {
+            id: Date.now().toString(), // Simple ID generation
+            type: type,
+            icon: icon,
+            isSpecial: isSpecial
+        };
+
+        try {
+            // Add to database
+            const response = await fetch(urltoy, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newToy)
+            });
+
+            if (response.ok) {
+                // Update gift states for all kids to include the new toy
+                const kidsResponse = await fetch(urlkid);
+                const kids = await kidsResponse.json();
+
+                // Update each kid's giftStates to include the new toy type
+                const updatePromises = kids.map(kid => {
+                    const updatedGiftStates = {
+                        ...kid.giftStates,
+                        [type]: false
+                    };
+
+                    return fetch(`${urlkid}/${kid.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            giftStates: updatedGiftStates
+                        })
+                    });
+                });
+
+                await Promise.all(updatePromises);
+
+                // Reinitialize the gift system
+                // await initializeGiftSystem();
+                fetchdatakid();
+            }
+        } catch (e) {
+            console.error('Error adding new toy:', e);
+        }
+    })();
+}
+
+// Event listener for adding new toy
+document.getElementById('addToyButton').addEventListener('click', addNewToy);
+
+// Initialize the gift system
+async function initializeGiftSystem() {
+    try {
+        const response = await fetch(urltoy);
+        const toysData = await response.json();
+        
+        // Convert toys array to object format for easier access
+        window.TOYS = toysData.reduce((acc, toy) => {
+            acc[toy.id] = {
+                type: toy.type,
+                icon: toy.icon, // Extract font-awesome class
+                isSpecial: toy.isSpecial
+            };
+            return acc;
+        }, {});
+
+        generateGiftFunctions();
+        // After TOYS is initialized, fetch kids data
+        await fetchdatakid();
+    } catch (e) {
+        console.error('Error initializing gift system:', e);
+    }
+}
+
 // Add a gift to a kid
 function addGift(event, kidId, giftType) {
     // Prevent default form submission 
@@ -137,23 +219,26 @@ function addGift(event, kidId, giftType) {
             let updatedGiftStates = { ...kid.giftStates };
             let updatedBehavior = kid.behavior;
             
-            if (giftType === 'Coals') {
+            if (giftType === 'coal') {
                 // Reset all gift states to false
+                console.log(2);
                 const keys = Object.keys(updatedGiftStates);
                 for(let key of keys) {
                     updatedGiftStates[key] = false;
                 }
-                // Set coals to true and behavior to 'bad'
-                updatedGiftStates.coals = true;
+                // Set coal to true and behavior to 'bad'
+                updatedGiftStates.coal = true;
                 updatedBehavior = 'bad';
             }
             else {
+                console.log(giftType);
                 // Set the right gift state to true
                 updatedGiftStates = {
                     ...kid.giftStates,
-                    [giftType.toLowerCase()]: true,
-                    // Make sure coals is false
-                    coals: false
+                    [giftType]: true,
+
+                    // Make sure coal is false
+                    coal: false
                 };
                 // Make sure behavior is 'good'
                 updatedBehavior = 'good';
@@ -170,9 +255,7 @@ function addGift(event, kidId, giftType) {
                     behavior: updatedBehavior
                 })            
             })
-            .then(() => {
-                fetchdatakid();
-            })
+            .then(() => fetchdatakid())
             .catch(e => console.error('Error updating kid with gift:', e));
         })
         .catch(e => console.error('Error fetching kid data:', e));
@@ -209,54 +292,48 @@ function removeGift(event, kidId, giftType) {
         .catch(e => console.error('Error fetching kid data:', e));
 }
 
-// Add books
-function addBooks(event, kidId) {
-    addGift(event, kidId, 'Books');
+// Generate functions for adding and removing gifts
+function generateGiftFunctions() {
+    Object.entries(TOYS).forEach(([toy, props]) => {
+        // Generate add function
+        window[`add${props.type}`] = function(event, kidId) {
+            addGift(event, kidId, props.type);
+        };
+        
+        // Generate remove function
+        window[`remove${props.type}`] = function(event, kidId) {
+            removeGift(event, kidId, props.type);
+        };
+    });
 }
 
-// Remove books
-function removeBooks(event, kidId) {
-    removeGift(event, kidId, 'Books');
-}
+// Generate gift buttons HTML
+function generateGiftButtons(kidId, giftStates) {
+    // Check if TOYS is initialized
+    if (!window.TOYS || Object.keys(window.TOYS).length === 0) {
+        return ''; // Return empty string if TOYS is not yet initialized
+    }
 
-// Add clothes
-function addClothes(event, kidId) {
-    addGift(event, kidId, 'Clothes');
-}
-
-// Remove clothes
-function removeClothes(event, kidId) {
-    removeGift(event, kidId, 'Clothes');
-}
-
-// Add dolls
-function addDolls(event, kidId) {
-    addGift(event, kidId, 'Dolls');
-}
-
-// Remove dolls
-function removeDolls(event, kidId) {
-    removeGift(event, kidId, 'Dolls');
-}
-
-// Add cars
-function addCars(event, kidId) {
-    addGift(event, kidId, 'Cars');
-}
-
-// Remove cars
-function removeCars(event, kidId) {
-    removeGift(event, kidId, 'Cars');
-}
-
-// Add coals
-function addCoals(event, kidId) {
-    addGift(event, kidId, 'Coals');
-}
-
-// Remove coals
-function removeCoals(event, kidId) {
-    removeGift(event, kidId, 'Coals');
+    return Object.entries(window.TOYS).map(([toyId, props]) => {
+        const buttonClass = props.isSpecial ? 'redbutton2' : 'smallbutton';
+        const deleteButtonClass = props.isSpecial ? 'deletebutton2' : 'deletebutton';
+        
+        // Check gift state using props.type instead of toyId
+        const isGiftGiven = giftStates[props.type] || false;
+        
+        return `
+            <button class="smallbutton ${buttonClass} mx-1" 
+                    style="display: ${isGiftGiven ? 'none' : 'block'};" 
+                    onclick="add${props.type}(event, '${kidId}')">
+                    ${props.icon}
+            </button>
+            <button class="smallbutton ${deleteButtonClass} mx-1" 
+                    style="display: ${isGiftGiven ? 'block' : 'none'};" 
+                    onclick="remove${props.type}(event, '${kidId}')">
+                    ${props.icon}
+            </button>
+        `;
+    }).join('');
 }
 
 // Edit a kid
@@ -269,7 +346,8 @@ function editKid(id) {
 }
 
 // Cancel edit
-function cancelEdit(id) {
+function cancelEdit(id, event) {
+    event.preventDefault();
     // Hide edit form and show content
     const kidDiv = document.getElementById(`kid-${id}`);
     kidDiv.querySelector('.kid-content').style.display = 'block';
@@ -278,7 +356,8 @@ function cancelEdit(id) {
 }
 
 // Save edit
-function saveEdit(id) {
+function saveEdit(id, event) {
+    event.preventDefault();
     fetch(`${urlkid}/${id}`)
         .then(res => res.json())
         .then(kid => {
@@ -310,7 +389,6 @@ function saveEdit(id) {
             .then(() => {
                 // Refresh the kids display
                 fetchdatakid();
-                fetchdatatoy();
             })
             .catch(e => console.error('Error updating kid:', e));
         }
@@ -319,7 +397,8 @@ function saveEdit(id) {
 }
 
 // Delete kid
-function deleteKid(id) {
+function deleteKid(id, event) {
+    event.preventDefault();
     fetch(`${urlkid}/${id}`, {
         method: 'DELETE'
     })
@@ -354,7 +433,7 @@ function loadSavedKids() {
             const kidDiv = document.createElement('div');
             kidDiv.className = 'kid-item';
             kidDiv.innerHTML = `
-                <span>${kid.name} has been a ${kid.behavior} and gets ${gifts}</span>
+                <span>${kid.name} has been a ${kid.behavior} kid and gets ${gifts}</span>
                 <button onclick="removeFromSaved('${kid.id}')">Remove</button>
             `;
             // Append kidDiv to savedOutput
@@ -367,7 +446,8 @@ function loadSavedKids() {
 }
 
 // Save kid to localStorage
-function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStates) {
+function saveToLocal(kidId, kidName, kidAge, kidBehavior, timestamp, kidGiftStates, event) {
+    event.preventDefault();
     try {
         // Decode and parse the giftStates string
         const giftStatesObject = JSON.parse(decodeURIComponent(kidGiftStates));
@@ -427,7 +507,12 @@ document.getElementById('clearStorage').addEventListener('click', () => {
     }
 });
 
-// Initial load
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+    await initializeGiftSystem();
+});
+
+// Call this when the page loads
 fetchdatakid();
 fetchdatatoy();
 loadSavedKids();
