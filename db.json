@@ -11,20 +11,21 @@
         "clothes": true,
         "doll": false,
         "car": false,
-        "coal": false
+        "coal": false,
+        "SpaceX": false
       }
     },
     {
       "name": "Karel",
       "age": 28,
-      "behavior": "bad",
+      "behavior": "good",
       "timestamp": 1732056198648,
       "giftStates": {
         "book": false,
-        "clothes": false,
-        "doll": false,
-        "car": false,
-        "coal": true
+        "clothes": true,
+        "doll": true,
+        "car": true,
+        "coal": false
       },
       "id": "ba79"
     },
@@ -34,10 +35,10 @@
       "behavior": "good",
       "timestamp": 1732056105925,
       "giftStates": {
-        "book": false,
+        "book": true,
         "clothes": true,
-        "doll": false,
-        "car": false,
+        "doll": true,
+        "car": true,
         "coal": false
       },
       "id": "90a1"
@@ -46,8 +47,9 @@
   "toys": [
     {
       "id": "1",
-      "type": "book",
-      "icon": "<i class='fa-solid fa-book'></i>"
+      "type": "coal",
+      "icon": "<i class='fa-solid fa-poop'></i>",
+      "isSpecial": true
     },
     {
       "id": "2",
@@ -58,12 +60,14 @@
     {
       "id": "3",
       "type": "doll",
-      "icon": "<i class='fa-solid fa-person'></i>"
+      "icon": "<i class='fa-solid fa-person'></i>",
+      "isSpecial": false
     },
     {
       "id": "4",
       "type": "car",
-      "icon": "<i class='fa-solid fa-car-side'></i>"
+      "icon": "<i class='fa-solid fa-car-side'></i>",
+      "isSpecial": false
     },
     {
       "id": "5",

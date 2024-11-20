@@ -6,65 +6,6 @@ const toyOutput = document.getElementById('toyOutput')
 const hiddenButtons = {};
 window.TOYS = {};
 
-
-// Fetch and display kids
-function fetchdatakid() {
-    // Empty output
-    output.innerHTML = '';
-    // Get right data
-    fetch(urlkid)
-        .then(res => res.json())
-        .then(data => {
-            // Check if data is empty
-            if (data.length === 0) {
-                const noKidsMessage = document.createElement('div');
-                noKidsMessage.className = 'no-kids-message';
-                noKidsMessage.textContent = 'No kids available. Add your first kid!';
-                output.appendChild(noKidsMessage);
-                return;
-            }
-            
-            // Sort kids by timestamp in descending order
-            const sortedData = data.sort((a, b) => b.timestamp - a.timestamp);
-            sortedData.forEach(kids => {
-                const giftStates = kids.giftStates || {};
-                // Fill output (info about kid, edit kid, buttons to add toys, edit/save/delete kid)
-                output.innerHTML += `
-                    <div class="kid-item" id="kid-${kids.id}">
-                        <span class="kid-content">${kids.name} : ${kids.age} years old, is a ${kids.behavior} kid</span>
-                        <form>
-                            <div class="edit-form" style="display: none;">
-                                <input type="text" class="edit-name" value="${kids.name}" required>
-                                <input type="number" class="edit-age" value="${kids.age}" required>
-                                <input type="text" class="edit-behavior" value="${kids.behavior}" required>
-                                <button class="smallbutton" onclick="saveEdit('${kids.id}')">S</button>
-                                <button class="smallbutton" onclick="cancelEdit('${kids.id}')">X</button>
-                            </div>
-                        </form>
-                        <div class="actions-container">
-                            <div class="button-group" id="button-group-${kids.id}">
-                                <button class="smallbutton mx-1 addbook" style="display: ${giftStates.book ? 'none' : 'block'};" onclick="addBook(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton deletebutton mx-1 removebook" style="display: ${giftStates.book ? 'block' : 'none'};" onclick="removeBook(event, '${kids.id}')"><i class="fa-solid fa-book"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.clothes ? 'none' : 'block'};" onclick="addClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display: ${giftStates.clothes ? 'block' : 'none'};" onclick="removeClothes(event, '${kids.id}')"><i class="fa-solid fa-shirt"></i></button>
-                                <button class="smallbutton mx-1" style="display: ${giftStates.doll ? 'none' : 'block'};" onclick="addDoll(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.doll ? 'block' : 'none'};" onclick="removeDoll(event, '${kids.id}')"><i class="fa-solid fa-person"></i></button>
-                                <button class="smallbutton mx-1" style="display : ${giftStates.car ? 'none' : 'block'};" onclick="addCar(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="smallbutton deletebutton mx-1" style="display : ${giftStates.car ? 'block' : 'none'};" onclick="removeCar(event, '${kids.id}')"><i class="fa-solid fa-car-side"></i></button>
-                                <button class="redbutton2 smallbutton mx-1" style="display : ${giftStates.coal ? 'none' : 'block'};" onclick="addCoal(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
-                                <button class="deletebutton2 smallbutton mx-1" style="display : ${giftStates.coal ? 'block' : 'none'};" onclick="removeCoal(event, '${kids.id}')"><i class="fa-solid fa-poop"></i></button>
-                            </div>
-                        </div>
-                        <div class="button-group">
-                            <button onclick="editKid('${kids.id}')">Edit</button>
-                            <button onclick="saveToLocal('${kids.id}', '${kids.name}', ${kids.age}, '${kids.behavior}', ${kids.timestamp}, '${encodeURIComponent(JSON.stringify(kids.giftStates))}')">Save</button>
-                            <button class="redbutton" onclick="deleteKid('${kids.id}')">Delete</button>
-                        </div>
-                    </div>
-                `;
-            });
-        })
-        .catch(e => console.error('Error fetching kids:', e));
 async function fetchdatakid() {
     try {
         output.innerHTML = '';
